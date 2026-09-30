@@ -1,0 +1,93 @@
+.top-nav {
+  position: relative;
+}
+
+.top-nav button {
+  width: 68px;
+  flex: none;
+  text-align: center;
+}
+
+.top-nav button.active::after {
+  display: none;
+}
+
+.top-nav .tab-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 18px;
+  width: 68px;
+  height: 3px;
+  border-radius: 3px;
+  background: #d99b4b;
+  pointer-events: none;
+  transform: translateX(0);
+  transition: transform 380ms cubic-bezier(.22, 1, .36, 1), opacity 180ms ease;
+  view-transition-name: tab-indicator;
+}
+
+.top-nav.club-active .tab-indicator {
+  transform: translateX(99px);
+}
+
+.top-nav.tab-none .tab-indicator {
+  opacity: 0;
+}
+
+main {
+  view-transition-name: tab-content;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+:root[data-tab-direction="forward"]::view-transition-old(tab-content) {
+  animation: tab-slide-out-left 380ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+:root[data-tab-direction="forward"]::view-transition-new(tab-content) {
+  animation: tab-slide-in-right 380ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+:root[data-tab-direction="backward"]::view-transition-old(tab-content) {
+  animation: tab-slide-out-right 380ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+:root[data-tab-direction="backward"]::view-transition-new(tab-content) {
+  animation: tab-slide-in-left 380ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes tab-slide-out-left {
+  to { transform: translateX(-20%); opacity: 0; }
+}
+
+@keyframes tab-slide-in-right {
+  from { transform: translateX(20%); opacity: 0; }
+}
+
+@keyframes tab-slide-out-right {
+  to { transform: translateX(20%); opacity: 0; }
+}
+
+@keyframes tab-slide-in-left {
+  from { transform: translateX(-20%); opacity: 0; }
+}
+
+@media (max-width: 1000px) {
+  .top-nav.club-active .tab-indicator { transform: translateX(82px); }
+}
+
+@media (max-width: 680px) {
+  .top-nav .tab-indicator { bottom: 0; }
+  .top-nav.club-active .tab-indicator { transform: translateX(90px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-nav .tab-indicator { transition: none; }
+  ::view-transition-old(tab-content),
+  ::view-transition-new(tab-content),
+  ::view-transition-old(tab-indicator),
+  ::view-transition-new(tab-indicator) { animation: none !important; }
+}

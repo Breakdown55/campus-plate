@@ -1,0 +1,32 @@
+.admin-login-modal {
+  width: min(100%, 440px);
+  background: #f4f7ef;
+  border: 1px solid #c9dac9;
+  box-shadow: 0 28px 90px rgba(8, 35, 22, .3);
+}
+
+.admin-login-mark {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  background: #1b513a;
+  color: #f9d269;
+}
+
+.admin-login-modal .modal-kicker {
+  color: #356c4b;
+}
+
+.admin-login-modal .modal-intro {
+  max-width: 340px;
+  color: #5e7463;
+}
+
+.admin-login-modal .modal-submit {
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 8px;
+}
