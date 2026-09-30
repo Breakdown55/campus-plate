@@ -167,9 +167,30 @@ function EventPage({ event, user, navigate, rsvp, onEdit, onDelete }) {
 }
 
 function ClubPage({ user, events, navigate, onNew, onEdit, onDelete, onLogin, onRegister }) {
-  if (!user || user.role !== 'club') return <main className="club-landing"><section className="club-hero"><div><div className="eyebrow"><span className="eyebrow-dot"/> FOR CLUB ORGANIZERS</div><h1>Bring your club<br/><em>to the table.</em></h1><p>Share your food events with students across campus. Add the menu, time, and place, then welcome everyone in.</p><div className="club-hero-actions"><button className="button button-yellow" onClick={onRegister}>Register your club <ArrowRight size={18}/></button><button className="hero-link" onClick={onLogin}>Club login <ArrowRight size={17}/></button></div></div><div className="club-hero-mark" aria-hidden="true"><UtensilsCrossed size={142}/><span>✳</span></div></section></main>;
+  if (!user || user.role !== 'club') return <main className="club-landing">
+    <section className="club-hero"><div><div className="eyebrow"><span className="eyebrow-dot"/> FOR CLUB ORGANIZERS</div><h1>Bring your club<br/><em>to the table.</em></h1><p>Share your food events with students across campus. Add the menu, time, and place, then welcome everyone in.</p><div className="club-hero-actions"><button className="button button-yellow" onClick={onRegister}>Register your club <ArrowRight size={18}/></button><button className="hero-link" onClick={onLogin}>Club login <ArrowRight size={17}/></button></div></div><div className="club-hero-mark" aria-hidden="true"><UtensilsCrossed size={142}/><span>✳</span></div></section>
+    <ClubDashboardPreview/>
+  </main>;
   const mine = events.filter(e => e.club_id === user.id);
   return <main className="subpage dashboard"><div className="dashboard-head"><div><span className="section-kicker">CLUB DASHBOARD</span><h1>{user.club_name}</h1><p>Welcome back, {user.name}. Manage your food events here.</p></div>{user.approved && <button className="button button-yellow" onClick={onNew}><Plus size={18}/> Add event</button>}</div>{!user.approved ? <div className="approval-banner"><ShieldCheck size={26}/><div><h2>Approval pending</h2><p>An admin needs to verify {user.club_name} before you can post events. Check back soon.</p></div></div> : <><div className="dashboard-stats"><div><strong>{mine.length}</strong><span>Events posted</span></div><div><strong>{mine.reduce((sum, e) => sum + e.going_count, 0)}</strong><span>People going</span></div><div><strong><ShieldCheck size={25}/></strong><span>Verified club</span></div></div><h2>Your events</h2>{mine.length ? <div className="manage-list">{mine.map(e => <div className="manage-row" key={e.id}><div><span className="manage-date">{formatDate(new Date(e.starts_at))}</span><button onClick={() => navigate(`/events/${e.id}`)}>{e.title}</button><small>{formatTime(e.starts_at)} · {e.location} · {e.going_count} going</small></div><div><button onClick={() => onEdit(e)}>Edit</button><button className="danger" onClick={() => onDelete(e)}>Delete</button></div></div>)}</div> : <div className="empty-state"><h3>No events yet</h3><p>Add your first event to bring students together.</p><button className="button button-dark" onClick={onNew}>Add an event</button></div>}</>}</main>;
+}
+
+function ClubDashboardPreview() {
+  const examples = [
+    { day: 'FRI', date: '02', month: 'OCT', title: 'Garden Club picnic', food: 'Sandwiches, fruit & iced tea', time: '12:00–2:00 PM', location: 'Advanced Technology Laboratories Building 007', going: 14 },
+    { day: 'MON', date: '05', month: 'OCT', title: 'Plant & pastry social', food: 'Croissants and coffee', time: '10:00 AM–12:00 PM', location: 'Campus Garden', going: 24 }
+  ];
+  return <section className="club-preview" aria-label="Example club dashboard">
+    <div className="club-preview-heading"><div><span className="section-kicker">YOUR CLUB DASHBOARD</span><h2>Keep every event in one place.</h2></div><span className="club-preview-note">Example dashboard</span></div>
+    <div className="club-preview-board">
+      <div className="club-preview-board-head"><span className="club-preview-avatar">G</span><div><strong>Garden Club</strong><small><ShieldCheck size={14}/> Verified club</small></div><div className="club-preview-count"><strong>38</strong><span>students going</span></div></div>
+      <div className="club-preview-list">{examples.map(example => <div className="club-preview-row" key={example.title}>
+        <div className="club-preview-date"><span>{example.day}</span><strong>{example.date}</strong><small>{example.month}</small></div>
+        <div className="club-preview-event"><h3>{example.title}</h3><p>{example.food}</p><div className="club-preview-meta"><span><Clock3 size={14}/>{example.time}</span><span><MapPin size={14}/>{example.location}</span></div></div>
+        <div className="club-preview-rsvp"><strong>{example.going}</strong><span>going</span></div>
+      </div>)}</div>
+    </div>
+  </section>;
 }
 
 function AdminPage({ user, pending, decide, onLogin }) {
